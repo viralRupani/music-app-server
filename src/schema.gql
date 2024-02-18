@@ -1,0 +1,56 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input ChangePasswordInput {
+  newPassword: String!
+  oldPassword: String!
+}
+
+input ForgotPasswordInput {
+  email: String!
+}
+
+input LoginInput {
+  password: String!
+  username: String!
+}
+
+type LoginOutput {
+  accessToken: String!
+  user: User!
+}
+
+type Mutation {
+  changePassword(changePasswordInput: ChangePasswordInput!): String!
+  forgotPassword(objet: ForgotPasswordInput!): String!
+  register(registerInput: RegisterInput!): User!
+  resetPassword(object: ResetPasswordInput!): String!
+}
+
+type Query {
+  login(loginInput: LoginInput!): LoginOutput!
+}
+
+input RegisterInput {
+  email: String!
+  first_name: String!
+  id: String!
+  last_name: String!
+  password: String!
+  phone_number: String!
+}
+
+input ResetPasswordInput {
+  email: String!
+  otp: String!
+  password: String!
+}
+
+type User {
+  email: String!
+  first_name: String!
+  id: String!
+  last_name: String!
+  phone_number: String!
+}
