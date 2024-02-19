@@ -12,10 +12,14 @@ import { ChangePasswordInput } from './inputs/change-password.input';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { ForgotPasswordInput } from './inputs/forgot-password.input';
 import { ResetPasswordInput } from './inputs/reset-password.input';
+import { MailProducer } from 'src/mail/mail.producer';
 
 @Resolver()
 export class AuthResolver {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly mailProducer: MailProducer,
+  ) {}
 
   @Query(() => LoginOutput)
   @UseGuards(LocalAuthGuard)
@@ -53,8 +57,15 @@ export class AuthResolver {
   ) {
     const otp: string =
       await this.authService.forgotPassword(forgotPasswordInput);
+
+    await this.mailProducer.queueMail({
+      subject: '[Music App]: Forgot Password OTP',
+      to: forgotPasswordInput.email,
+      template: 'forgot-password',
+      context: { otp },
+    });
+
     return 'An Email has been sent to you for reset password.';
-    // TODO: implement queue and add emailing in queue
   }
 
   @Mutation(() => String)

@@ -2,13 +2,14 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import configuration from './config/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
 import { typeormOptions } from './database/data-source';
 import { AuthModule } from './auth/auth.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { MailModule } from './mail/mail.module';
+import { BullModule } from '@nestjs/bull';
 
 @Module({
   imports: [
@@ -22,6 +23,12 @@ import { ThrottlerModule } from '@nestjs/throttler';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
     }),
+    BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
     ThrottlerModule.forRoot([
       {
         name: 'login',
@@ -34,8 +41,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
       ...typeormOptions,
     }),
     AuthModule,
+    MailModule,
   ],
 })
-export class AppModule {
-  constructor(private dataSource: DataSource) {}
-}
+export class AppModule {}

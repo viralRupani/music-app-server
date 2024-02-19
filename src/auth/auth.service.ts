@@ -137,7 +137,7 @@ export class AuthService {
       const foundOtp: Otp = await this.otpRepository.findOneBy({
         email: resetPassInput.email,
         otp: resetPassInput.otp,
-        is_active: true
+        is_active: true,
       });
 
       const currentTime: number = new Date().getTime();

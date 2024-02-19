@@ -4,7 +4,6 @@ import {
   IsString,
   IsStrongPassword,
   MaxLength,
-  Min,
   MinLength,
 } from 'class-validator';
 
